@@ -4,8 +4,18 @@ PostgreSQL (Supabase). Схема создаётся файлами из пап�
 
 1. `db/01_catalog.sql` — школы, специальности, дисциплины, пререквизиты
 2. `db/02_core.sql` — профили, материалы, файлы, ИИ-проверки, лайки, комментарии, жалобы
+3. `db/03_security.sql` — регистрация только с `@kbtu.kz`, права доступа, RLS, модерация, хранилище файлов
 
-Для локальной проверки в обычном PostgreSQL перед ними запускается `db/tests/00_local_auth_stub.sql`, после них — `db/tests/01_core_tests.sql`.
+## Локальные тесты (обычный PostgreSQL, не Supabase)
+
+`db/tests/00_local_auth_stub.sql` создаёт заглушку Supabase: роли `anon`, `authenticated`, `service_role`, функцию `auth.uid()`, схему `storage`.
+
+| Тест | Порядок запуска в чистой базе |
+|---|---|
+| Ограничения таблиц | `00_local_auth_stub` → `01_catalog` → `02_core` → `tests/01_core_tests` |
+| Безопасность (97 проверок) | `00_local_auth_stub` → `01_catalog` → `02_core` → `03_security` → `tests/02_security_tests` |
+
+Тест безопасности печатает таблицу результатов: все строки должны быть `PASS`.
 
 ## ER-диаграмма
 
