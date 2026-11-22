@@ -123,6 +123,7 @@ erDiagram
     text body
     bool is_deleted
     timestamptz created_at
+    timestamptz edited_at
   }
   REPORTS {
     int id PK

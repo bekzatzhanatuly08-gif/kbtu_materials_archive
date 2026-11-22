@@ -68,7 +68,9 @@ CREATE TABLE comments (
     parent_id   INT         REFERENCES comments(id) ON DELETE CASCADE,
     body        TEXT        NOT NULL CHECK (length(trim(body)) BETWEEN 1 AND 2000),
     is_deleted  BOOLEAN     NOT NULL DEFAULT FALSE,
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    edited_at   TIMESTAMPTZ,
+    CHECK (edited_at IS NULL OR edited_at >= created_at)
 );
 
 CREATE TABLE reports (
